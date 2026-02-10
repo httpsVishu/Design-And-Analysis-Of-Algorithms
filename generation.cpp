@@ -12,14 +12,14 @@ int main(){
     ofstream file("arrays.csv");
 
     if (!file){
-        cout<<"File could not be opened"<<endl;
+        cout<<"File could not be opened :/"<<endl;
         return 0;
     }
 
     srand(time(0));
 
-    for (int a = 0; a < 100; a++){  
-        int n = rand()%100 + 1;  
+    for (int a = 0; a < 100; a++){  //100 arrays generate karane hai
+        int n = rand()%971 + 30;  //array ka  size
 
         vector<int> original;
         for (int i =0; i < n; i++){
@@ -29,6 +29,8 @@ int main(){
         for (int j = 0; j < 8; j++){  // 8 shuffled
             vector<int> temp = original;
             random_shuffle(temp.begin(), temp.end());
+
+            file << "S," << n << ",";
 
             for (int k = 0; k < temp.size(); k++){
                 file << temp[k];
@@ -42,6 +44,8 @@ int main(){
         vector<int> sortedArray = original;
         sort(sortedArray.begin(), sortedArray.end());
 
+        file << "A," << n << ",";
+
         for (int i = 0; i < sortedArray.size(); i++){    //ascending
             file << sortedArray[i];
             if (i != sortedArray.size() - 1){
@@ -50,13 +54,18 @@ int main(){
         }
         file << endl;
 
-        for (int j = (int)sortedArray.size() - 1; j>=0; j--){    //descending
-            file << sortedArray[j];
-            if (j != sortedArray.size() - 1){
-                file << ",";
-            }
+        vector<int> descArray = sortedArray;
+        reverse(descArray.begin(), descArray.end());   //descending
+
+        file << "D," << n << ",";
+
+        for (int i = 0; i < descArray.size(); i++) {
+        file << descArray[i];
+        if (i != descArray.size() - 1) {
+            file << ",";
         }
-        file << endl;
+}
+    file << endl;
     }
 
     file.close();
