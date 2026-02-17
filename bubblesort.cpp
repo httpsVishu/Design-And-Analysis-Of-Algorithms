@@ -19,6 +19,33 @@ void bubbleSort(vector<int> &arr, long long& passes, long long& comparisons, lon
     }
 }
 
+void processArray(vector<int> arr, char type, int arrayNum, ofstream &fout, long long &sumPass, long long &sumCom, long long &sumShifts,int  batchCount){
+        long long passes = 0;
+        long long comparisons = 0;
+        long long shifts = 0;
+
+        bubbleSort(arr, passes, comparisons, shifts);  //array sorted
+
+        fout << arrayNum << "," << type << "," << arr.size() << "," << 
+                passes << "," << comparisons << "," << shifts << endl;
+
+        sumPass += passes;
+        sumCom += comparisons;
+        sumShifts += shifts;
+        batchCount++;
+
+        if (batchCount == 10){
+            fout << "AVG,AVG,-,"<< 
+                    (double)sumPass/10 << "," <<
+                    (double)sumCom/10 << "," << (double)sumShifts/10 << "\n";
+
+            batchCount = 0;
+            sumPass =  0;
+            sumCom = 0;
+            sumShifts = 0;
+        }
+}
+
 int main(){
     ifstream fin("arrays.csv");
     ofstream fout("bubble_results.csv");
@@ -57,30 +84,8 @@ int main(){
         char ch;
         while (fin.get(ch) && ch != '\n');
 
-        long long passes = 0;
-        long long comparisons = 0;
-        long long shifts = 0;
-
-        bubbleSort(arr, passes, comparisons, shifts);  //array sorted
-
-        fout << arrayNum << "," << type << "," << arr.size() << "," << 
-                passes << "," << comparisons << "," << shifts << endl;
-
-        sumPass += passes;
-        sumCom += comparisons;
-        sumShifts += shifts;
-        batchCount++;
-
-        if (batchCount == 10){
-            fout << "AVG,AVG,-,"<< 
-                    (double)sumPass/10 << "," <<
-                    (double)sumCom/10 << "," << (double)sumShifts/10 << "\n";
-
-            batchCount = 0;
-            sumPass =  0;
-            sumCom = 0;
-            sumShifts = 0;
-        }
+        processArray(arr, type, arrayNum, fout, sumPass, sumCom, sumShifts, batchCount);
+        
         arrayNum++;
     }
 
